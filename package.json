@@ -1,0 +1,23 @@
+{
+  "name": "restify-cqrs",
+  "version": "0.0.1",
+  "description": "A simple CQRS library for handling commands and queries in restify",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/glenc/restify-cqrs.git"
+  },
+  "keywords": [
+    "cqrs",
+    "restify",
+    "REST"
+  ],
+  "author": "Glen Cooper <glencooper@gmail.com>",
+  "license": "GPLv2",
+  "bugs": {
+    "url": "https://github.com/glenc/restify-cqrs/issues"
+  }
+}
