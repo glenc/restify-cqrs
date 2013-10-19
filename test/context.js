@@ -16,7 +16,9 @@ var Context = module.exports = (function() {
   };
 
   var reset = function() {
-    handledCommands = {};
+    Object.keys(handledCommands).forEach(function(k) {
+      delete handledCommands[k];
+    });
   };
 
   return {

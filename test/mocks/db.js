@@ -20,7 +20,21 @@ var CommandStore = function() {
     command.id = self.commands.length+1;
     self.commands.push(command);
     return callback(null, command.id);
-  }
+  };
+
+  self.update = function(command, callback) {
+    var idx = -1;
+    for(var i=0; i<self.commands.length; i++) {
+      if (self.commands[i].id == command.id) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx < 0) return callback(new cqrs.errors.NotFoundError('Command with id ' + command.id + ' does not exist.'));
+
+    self.commands[idx] = command;
+    callback();
+  };
 };
 
 var Db = module.exports = (function() {
