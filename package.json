@@ -22,7 +22,10 @@
   },
   "devDependencies": {
     "chai": "~1.8.1",
-    "mocha": "~1.13.0"
+    "mocha": "~1.13.0",
+    "grunt": "~0.4.1",
+    "grunt-mocha-test": "~0.7.0",
+    "restify": "~2.6.0"
   },
   "dependencies": {
     "glob-module-loader": "0.0.2",
