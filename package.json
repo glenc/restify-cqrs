@@ -19,5 +19,12 @@
   "license": "GPLv2",
   "bugs": {
     "url": "https://github.com/glenc/restify-cqrs/issues"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "mocha": "~1.13.0"
+  },
+  "dependencies": {
+    "glob-module-loader": "0.0.1"
   }
 }
