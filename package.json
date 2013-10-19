@@ -25,6 +25,7 @@
     "mocha": "~1.13.0"
   },
   "dependencies": {
-    "glob-module-loader": "0.0.1"
+    "glob-module-loader": "0.0.2",
+    "async": "~0.2.9"
   }
 }
