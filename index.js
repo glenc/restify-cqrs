@@ -2,14 +2,24 @@ var async           = require('async');
 var loader          = require('glob-module-loader');
 var commandService  = require('./lib/command-service');
 var queryService    = require('./lib/query-service');
-var restifyAdapter  = require('./lib/restify-adapter');
+var router          = require('./lib/router');
 
-var RestifyCqrs = module.exports = (function() {
+var RestifyCqrs = function(server, config, callback) {
+  var querySvc = queryService.create();
+  var cmdSvc = commandService.create(config.commandStore);
+  var routes = router.create(cmdSvc, querySvc);
+
+  // TODO - this is kinda messy
+  async.waterfall([
+    function(cb) { loadModules(config, cb); },
+    function(cb) { registerRoutes(server, cb); }
+  ], callback);
+
   var loadModules = function(config, callback) {
     async.parallel([
-      function(cb) { loader.loadAsync(config.searchPaths.commandHandlers, commandService.registerHandler, cb); },
-      function(cb) { loader.loadAsync(config.searchPaths.queries, queryService.registerQuery, cb); },
-      function(cb) { loader.loadAsync(config.searchPaths.projections, queryService.registerProjection, cb); }
+      function(cb) { loader.loadAsync(config.searchPaths.commandHandlers, cmdSvc.registerHandler, cb); },
+      function(cb) { loader.loadAsync(config.searchPaths.queries, querySvc.registerQuery, cb); },
+      function(cb) { loader.loadAsync(config.searchPaths.projections, querySvc.registerProjection, cb); }
     ], function(err) {
       if (err) return callback(err);
       return callback();
@@ -17,18 +27,15 @@ var RestifyCqrs = module.exports = (function() {
   };
 
   var registerRoutes = function(server, callback) {
-    restifyAdapter.registerRoutes(server);
+    routes.registerRoutes(server);
     callback();
   };
 
-  var init = function(server, config, callback) {
-    async.waterfall([
-      function(cb) { loadModules(config, cb); },
-      function(cb) { registerRoutes(server, cb); }
-    ], callback);
-  };
+};
 
-  return {
-    init: init
-  };
-})();
+module.exports = {
+  errors: require('./lib/errors'),
+  init: function(server, config, callback) {
+    new RestifyCqrs(server, config, callback);
+  }
+};
