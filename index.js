@@ -1,23 +1,27 @@
-var async   = require('async');
-var loader  = require('glob-module-loader');
+var async           = require('async');
+var loader          = require('glob-module-loader');
+var commandService  = require('./lib/command-service');
+var queryService    = require('./lib/query-service');
+var restifyAdapter  = require('./lib/restify-adapter');
 
 var RestifyCqrs = module.exports = (function() {
   var loadModules = function(config, callback) {
-    console.log('load modules');
     async.parallel([
-      function(cb) { console.log('handlers'); loader.loadAsync(config.searchPaths.commandHandlers, function(module) { console.log('loaded handler'); }, cb); },
-      function(cb) { console.log('queries'); loader.loadAsync(config.searchPaths.queries, function(module) { console.log('loaded query'); }, cb); },
-      function(cb) { console.log('projections'); loader.loadAsync(config.searchPaths.projections, function(module) { console.log('loaded projection'); }, cb); }
-    ], callback);
+      function(cb) { loader.loadAsync(config.searchPaths.commandHandlers, commandService.registerHandler, cb); },
+      function(cb) { loader.loadAsync(config.searchPaths.queries, queryService.registerQuery, cb); },
+      function(cb) { loader.loadAsync(config.searchPaths.projections, queryService.registerProjection, cb); }
+    ], function(err) {
+      if (err) return callback(err);
+      return callback();
+    });
   };
 
   var registerRoutes = function(server, callback) {
-    console.log('register routes');
+    restifyAdapter.registerRoutes(server);
     callback();
   };
 
   var init = function(server, config, callback) {
-    console.log('init');
     async.waterfall([
       function(cb) { loadModules(config, cb); },
       function(cb) { registerRoutes(server, cb); }
