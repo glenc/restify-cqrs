@@ -1,7 +1,9 @@
+var context = require('../../context');
+
 module.exports = {
   name: 'new-file',
   handler: function(payload, callback) {
-    console.log('handled new file');
+    context.trackCommandHandled('new-file');
     callback(null, {});
   }
 }

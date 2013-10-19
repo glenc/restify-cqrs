@@ -1,7 +1,9 @@
+var context = require('../../context');
+
 module.exports = {
   name: 'rename-file',
   handler: function(payload, callback) {
-    console.log('handled rename file');
+    context.trackCommandHandled('rename-file');
     callback(null, {});
   }
 }

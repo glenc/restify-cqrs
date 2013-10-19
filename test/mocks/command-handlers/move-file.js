@@ -1,7 +1,9 @@
+var context = require('../../context');
+
 module.exports = {
   name: 'move-file',
   handler: function(payload, callback) {
-    console.log('handled move file');
+    context.trackCommandHandled('move-file');
     callback(null, {});
   }
 }

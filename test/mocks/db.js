@@ -15,6 +15,12 @@ var CommandStore = function() {
     if (!cmd) return callback(new cqrs.errors.NotFoundError('Command with id ' + id + ' does not exist.'));
     return callback(null, cmd);
   };
+
+  self.save = function(command, callback) {
+    command.id = self.commands.length+1;
+    self.commands.push(command);
+    return callback(null, command.id);
+  }
 };
 
 var Db = module.exports = (function() {

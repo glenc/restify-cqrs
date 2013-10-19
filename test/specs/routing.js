@@ -2,7 +2,7 @@ var expect  = require('chai').expect;
 var restify = require('restify');
 var async   = require('async');
 var config  = require('../config');
-var helper  = require('../helper');
+var context  = require('../context');
 var db      = require('../mocks/db');
 
 describe('routing', function() {
@@ -22,8 +22,8 @@ describe('routing', function() {
         expect(err).not.to.exist;
         expect(res.statusCode).to.equal(200);
         expect(obj).to.exist;
-        expect(obj).to.have.length(helper.testCommands.length);
-        helper.testCommands.forEach(function(c) {
+        expect(obj).to.have.length(context.testCommands.length);
+        context.testCommands.forEach(function(c) {
           expect(obj).to.contain(c);
         });
         done();
@@ -39,7 +39,7 @@ describe('routing', function() {
         });
       };
 
-      async.each(helper.testCommands, testCommandRoute, done);
+      async.each(context.testCommands, testCommandRoute, done);
     });
 
     it('returns a 404 when posting an unknown command', function(done) {
