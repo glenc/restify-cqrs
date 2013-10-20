@@ -9,7 +9,6 @@ var db      = require('../mocks/db');
 describe('command handling', function() {
 
   var result = {};
-
   before(function(done) {
 
     var doTest = function() {
@@ -52,15 +51,73 @@ describe('command resolution', function() {
 
   describe('success', function() {
 
-    it('should store the result on the command in the commandStore');
-    it('should set the completedAt time on the command in the commandStore');
+    var result = {};
+    before(function(done) {
+
+      var doTest = function() {
+        var client = restify.createJsonClient({
+          url: 'http://localhost:' + config.web.port
+        });
+
+        client.post(
+          '/commands/new-file',
+          { contents: 'hello' },
+          new helper.responseHandler(result, done));
+      }
+
+      async.parallel([
+        function(cb) { db.CommandStore.reset(cb); },
+        function(cb) { context.reset(); cb(); }
+      ], doTest);
+    });
+
+    it('should store the result on the command in the commandStore', function() {
+      var storedCommand = db.CommandStore.commands[0];
+      expect(storedCommand.id).to.equal(result.obj.id);
+      expect(storedCommand.result).to.deep.equal({ success: true });
+    });
+
+    it('should set the completedAt time on the command in the commandStore', function() {
+      var storedCommand = db.CommandStore.commands[0];
+      expect(storedCommand.id).to.equal(result.obj.id);
+      expect(storedCommand.completedAt).to.exist;
+    });
 
   });
 
   describe('failure', function() {
 
-    it('should store the error on the command in the commandStore');
-    it('should set the completedAt time on the command in the commandStore');
+    var result = {};
+    before(function(done) {
+
+      var doTest = function() {
+        var client = restify.createJsonClient({
+          url: 'http://localhost:' + config.web.port
+        });
+
+        client.post(
+          '/commands/throw-error',
+          { contents: 'hello' },
+          new helper.responseHandler(result, done));
+      }
+
+      async.parallel([
+        function(cb) { db.CommandStore.reset(cb); },
+        function(cb) { context.reset(); cb(); }
+      ], doTest);
+    });
+
+    it('should store the error on the command in the commandStore', function() {
+      var storedCommand = db.CommandStore.commands[0];
+      expect(storedCommand.id).to.equal(result.obj.id);
+      expect(storedCommand.error).to.exist;
+    });
+
+    it('should set the completedAt time on the command in the commandStore', function() {
+      var storedCommand = db.CommandStore.commands[0];
+      expect(storedCommand.id).to.equal(result.obj.id);
+      expect(storedCommand.completedAt).to.exist;
+    });
 
   });
 

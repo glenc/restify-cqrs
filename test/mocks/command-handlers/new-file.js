@@ -4,6 +4,6 @@ module.exports = {
   name: 'new-file',
   handler: function(payload, callback) {
     context.trackCommandHandled('new-file');
-    callback(null, {});
+    callback(null, { success: true });
   }
 }

@@ -4,6 +4,6 @@ module.exports = {
   name: 'delete-file',
   handler: function(payload, callback) {
     context.trackCommandHandled('delete-file');
-    callback(null, {});
+    callback(null, { success: true });
   }
 }

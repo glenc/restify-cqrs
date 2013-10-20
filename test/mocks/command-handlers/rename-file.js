@@ -4,6 +4,6 @@ module.exports = {
   name: 'rename-file',
   handler: function(payload, callback) {
     context.trackCommandHandled('rename-file');
-    callback(null, {});
+    callback(null, { success: true });
   }
 }

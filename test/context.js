@@ -3,7 +3,8 @@ var Context = module.exports = (function() {
     'new-file',
     'rename-file',
     'delete-file',
-    'move-file'
+    'move-file',
+    'throw-error'
   ];
 
   var handledCommands = {};
