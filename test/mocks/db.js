@@ -13,7 +13,10 @@ var CommandStore = function() {
   self.get = function(id, callback) {
     var cmd = _.find(self.commands, function(c) { return c.id == id; });
     if (!cmd) return callback(new cqrs.errors.NotFoundError('Command with id ' + id + ' does not exist.'));
-    return callback(null, cmd);
+
+    var tmp = {};
+    extend(tmp, cmd);
+    return callback(null, tmp);
   };
 
   self.save = function(command, callback) {
@@ -35,6 +38,23 @@ var CommandStore = function() {
     self.commands[idx] = command;
     callback();
   };
+
+  function extend(dest, from) {
+    var props = Object.getOwnPropertyNames(from), destination;
+
+    props.forEach(function (name) {
+      if (typeof from[name] === 'object') {
+        if (typeof dest[name] !== 'object') {
+          dest[name] = {}
+        }
+        extend(dest[name],from[name]);
+      } else {
+        destination = Object.getOwnPropertyDescriptor(from, name);
+        Object.defineProperty(dest, name, destination);
+      }
+    });
+  };
+
 };
 
 var Db = module.exports = (function() {
