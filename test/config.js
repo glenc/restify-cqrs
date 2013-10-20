@@ -4,7 +4,7 @@ config.cqrs = {
   searchPaths: {
     queries: 'test/mocks/queries/**/*.js',
     commandHandlers: 'test/mocks/command-handlers/**/*.js',
-    projections: 'test/mocks/projections/**/*.js'
+    views: 'test/mocks/views/**/*.js'
   },
   commandStore: require('./mocks/db').CommandStore
 };

@@ -2,7 +2,7 @@ var expect  = require('chai').expect;
 var restify = require('restify');
 var async   = require('async');
 var config  = require('../config');
-var context  = require('../context');
+var context = require('../context');
 var db      = require('../mocks/db');
 
 describe('routing', function() {
@@ -95,7 +95,7 @@ describe('routing', function() {
       expectedRoutes.forEach(function(route) {
         describe('GET ' + route, function() {
           it('returns status code 200', function(done) {
-            client.get(root, function(err, req, res, obj) {
+            client.get(route, function(err, req, res, obj) {
               expect(res.statusCode).to.equal(200);
               expect(err).not.to.exist;
               done();
