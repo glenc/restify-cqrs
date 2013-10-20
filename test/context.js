@@ -25,6 +25,7 @@ var Context = module.exports = (function() {
   };
 
   var handledCommands = {};
+  var executedQueries = {};
 
   var trackCommandHandled = function(command) {
     if (!handledCommands[command])
@@ -33,9 +34,20 @@ var Context = module.exports = (function() {
     handledCommands[command]++;
   };
 
+  var trackExecutedQuery = function(model, query, view, parameters) {
+    var key = model + ':' + query;
+    if (!executedQueries[key])
+      executedQueries[key] = [];
+
+    executedQueries[key].push({view: view, parameters: parameters});
+  };
+
   var reset = function() {
     Object.keys(handledCommands).forEach(function(k) {
       delete handledCommands[k];
+    });
+    Object.keys(executedQueries).forEach(function(k) {
+      delete executedQueries[k];
     });
   };
 
@@ -43,7 +55,9 @@ var Context = module.exports = (function() {
     testCommands: testCommands,
     testModels: testModels,
     handledCommands: handledCommands,
+    executedQueries: executedQueries,
     trackCommandHandled: trackCommandHandled,
+    trackExecutedQuery: trackExecutedQuery,
     reset: reset
   };
 

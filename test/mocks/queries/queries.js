@@ -1,8 +1,11 @@
+var context = require('../../context');
+
 function simpleQuery(model, name) {
   return {
     model: model,
     name: name,
-    execute: function(parameters, view, callback) {
+    execute: function(view, parameters, callback) {
+      context.trackExecutedQuery(model, name, view, parameters);
       callback();
     }
   };

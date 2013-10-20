@@ -4,7 +4,7 @@
   "description": "A simple CQRS library for handling commands and queries in restify",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
