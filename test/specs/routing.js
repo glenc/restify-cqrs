@@ -74,4 +74,39 @@ describe('routing', function() {
 
   });
 
+  describe('queries', function() {
+
+    var client = restify.createJsonClient({
+      url: 'http://localhost:' + config.web.port
+    });
+
+    // test each scenario we have
+    var models = Object.keys(context.testModels);
+    models.forEach(function(name) {
+      var model = context.testModels[name];
+      var expectedRoutes = [];
+
+      if (model.hasDefaultQuery) expectedRoutes.push('/' + model.plural);
+      if (model.hasGetter) expectedRoutes.push('/' + model.plural + '/1');
+      model.namedQueries.forEach(function(q) {
+        expectedRoutes.push('/' + model.plural + '/' + q);
+      });
+
+      expectedRoutes.forEach(function(route) {
+        describe('GET ' + route, function() {
+          it('returns status code 200', function(done) {
+            client.get(root, function(err, req, res, obj) {
+              expect(res.statusCode).to.equal(200);
+              expect(err).not.to.exist;
+              done();
+            });
+          });
+        });
+      });
+
+    });
+
+
+  });
+
 });

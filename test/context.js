@@ -7,6 +7,23 @@ var Context = module.exports = (function() {
     'throw-error'
   ];
 
+  var testModels = {
+    file: {
+      plural: 'files',
+      hasDefaultQuery: true,
+      hasGetter: true,
+      namedQueries: [ 'large-files', 'small-files' ],
+      views: []
+    },
+    secret: {
+      plural: 'secrets',
+      hasDefaultQuery: false,
+      hasGetter: true,
+      namedQueries: [],
+      views: []
+    }
+  };
+
   var handledCommands = {};
 
   var trackCommandHandled = function(command) {
@@ -24,6 +41,7 @@ var Context = module.exports = (function() {
 
   return {
     testCommands: testCommands,
+    testModels: testModels,
     handledCommands: handledCommands,
     trackCommandHandled: trackCommandHandled,
     reset: reset
