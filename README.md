@@ -24,19 +24,19 @@ GET  /<model>/:id                   # get a single model
 
 Say you wanted to build an API on top of a file system.  In your API you wanted to support the following models and commands:
 
-* **file**
-  * commands
-    * new-file
-    * rename-file
-    * delete-file
-    * move-file
-  * queries
-    * all-files (default)
-    * large-files
-    * small-files
-* **drive**
-  * queries
-    * all-drives (default)
+* Model: **file**
+   * commands
+      * new-file
+       * rename-file
+       * delete-file
+       * move-file
+   * queries
+       * all-files (default)
+       * large-files
+       * small-files
+* Model: **drive**
+   * queries
+       * all-drives (default)
 
 This would yield the following API routes for your application:
 
