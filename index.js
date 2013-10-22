@@ -17,9 +17,9 @@ var RestifyCqrs = function(server, config, callback) {
 
   var loadModules = function(config, callback) {
     async.parallel([
-      function(cb) { loader.loadAsync(config.searchPaths.commandHandlers, cmdSvc.registerHandlers, cb); },
-      function(cb) { loader.loadAsync(config.searchPaths.queries, querySvc.registerQueries, cb); },
-      function(cb) { loader.loadAsync(config.searchPaths.views, querySvc.registerViews, cb); }
+      function(cb) { loader.load(config.searchPaths.commandHandlers, cmdSvc.registerHandlers, cb); },
+      function(cb) { loader.load(config.searchPaths.queries, querySvc.registerQueries, cb); },
+      function(cb) { loader.load(config.searchPaths.views, querySvc.registerViews, cb); }
     ], function(err) {
       if (err) return callback(err);
       return callback();
