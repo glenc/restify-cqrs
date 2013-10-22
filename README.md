@@ -81,5 +81,6 @@ GET  /drives/:id              # execute the getter query for the drive model
 ```
 
 ## Getting Started
-
+See the [Sample Application](https://github.com/glenc/restify-cqrs-sample) and
+associated [Walkthrough](wiki) for a quick getting started guide.
 
