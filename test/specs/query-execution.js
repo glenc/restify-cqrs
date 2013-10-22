@@ -20,7 +20,6 @@ describe('query execution', function() {
       });
 
       it('executes the proper query once', function() {
-        console.log(context.executedQueries);
         var tracked = context.executedQueries['file:large-files'];
         expect(tracked).to.have.length(1);
       });
