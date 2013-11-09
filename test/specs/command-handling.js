@@ -6,45 +6,47 @@ var helper  = require('../helper');
 var context = require('../context');
 var db      = require('../mocks/db');
 
-describe('command handling', function() {
+['/commands/new-file', '/commands/new-file/'].forEach(function(path) {
 
-  var result = {};
-  before(function(done) {
+  describe('command handling (' + path + ')', function() {
+    var result = {};
+    before(function(done) {
 
-    var doTest = function() {
-      var client = restify.createJsonClient({
-        url: 'http://localhost:' + config.web.port
-      });
+      var doTest = function() {
+        var client = restify.createJsonClient({
+          url: 'http://localhost:' + config.web.port
+        });
 
-      client.post(
-        '/commands/new-file',
-        { contents: 'hello' },
-        new helper.responseHandler(result, done));
-    }
+        client.post(
+          path,
+          { contents: 'hello' },
+          new helper.responseHandler(result, done));
+      }
 
-    async.parallel([
-      function(cb) { db.CommandStore.reset(cb); },
-      function(cb) { context.reset(); cb(); }
-    ], doTest);
+      async.parallel([
+        function(cb) { db.CommandStore.reset(cb); },
+        function(cb) { context.reset(); cb(); }
+      ], doTest);
+    });
+
+    it('should store the command in the commandStore', function() {
+      expect(db.CommandStore.commands).to.have.length(1);
+      var storedCommand = db.CommandStore.commands[0];
+      expect(storedCommand.id).to.equal(result.obj.id);
+      expect(storedCommand.payload).to.deep.equal({ contents: 'hello' });
+      expect(storedCommand.submittedAt).to.exist;
+    });
+
+    it('should return a command id', function() {
+      expect(result.obj).to.exist;
+      expect(result.obj.id).to.exist;
+    });
+
+    it('should call the appropriate handler', function() {
+      expect(context.handledCommands['new-file']).to.equal(1);
+    });
+
   });
-
-  it('should store the command in the commandStore', function() {
-    expect(db.CommandStore.commands).to.have.length(1);
-    var storedCommand = db.CommandStore.commands[0];
-    expect(storedCommand.id).to.equal(result.obj.id);
-    expect(storedCommand.payload).to.deep.equal({ contents: 'hello' });
-    expect(storedCommand.submittedAt).to.exist;
-  });
-
-  it('should return a command id', function() {
-    expect(result.obj).to.exist;
-    expect(result.obj.id).to.exist;
-  });
-
-  it('should call the appropriate handler', function() {
-    expect(context.handledCommands['new-file']).to.equal(1);
-  });
-
 });
 
 describe('command resolution', function() {

@@ -91,29 +91,32 @@ describe('query execution', function() {
 
   describe('default query', function() {
 
-    describe('without parameters or view', function() {
-      before(function(done) {
-        context.reset();
-        client.get('/files', done);
-      });
+    ['/files', '/files/'].forEach(function(path) {
 
-      it('executes the proper query once', function() {
-        var tracked = context.executedQueries['file:'];
-        expect(tracked).to.have.length(1);
-      });
+      describe('without parameters or view (' + path + ')', function() {
+        before(function(done) {
+          context.reset();
+          client.get(path, done);
+        });
 
-      it('passes the default view to the query', function() {
-        var tracked = context.executedQueries['file:'][0];
-        expect(tracked.view).to.exist;
-        expect(tracked.view.name).to.equal('');
-      });
+        it('executes the proper query once', function() {
+          var tracked = context.executedQueries['file:'];
+          expect(tracked).to.have.length(1);
+        });
 
-      it('passes no parameters to the query', function() {
-        var tracked = context.executedQueries['file:'][0];
-        expect(tracked.parameters).to.exist;
-        expect(tracked.parameters).to.be.empty;
-      });
+        it('passes the default view to the query', function() {
+          var tracked = context.executedQueries['file:'][0];
+          expect(tracked.view).to.exist;
+          expect(tracked.view.name).to.equal('');
+        });
 
+        it('passes no parameters to the query', function() {
+          var tracked = context.executedQueries['file:'][0];
+          expect(tracked.parameters).to.exist;
+          expect(tracked.parameters).to.be.empty;
+        });
+
+      });
     });
 
     describe('with parameters', function() {
@@ -169,27 +172,31 @@ describe('query execution', function() {
 
   describe('getter', function() {
 
-    describe('without parameters or view', function() {
-      before(function(done) {
-        context.reset();
-        client.get('/files/1', done);
-      });
+    ['/files/1', '/files/1/'].forEach(function(path) {
 
-      it('executes the proper query once', function() {
-        var tracked = context.executedQueries['file:get'];
-        expect(tracked).to.have.length(1);
-      });
+      describe('without parameters or view (' + path + ')', function() {
+        before(function(done) {
+          context.reset();
+          client.get(path, done);
+        });
 
-      it('passes the default view to the query', function() {
-        var tracked = context.executedQueries['file:get'][0];
-        expect(tracked.view).to.exist;
-        expect(tracked.view.name).to.equal('');
-      });
+        it('executes the proper query once', function() {
+          var tracked = context.executedQueries['file:get'];
+          expect(tracked).to.have.length(1);
+        });
 
-      it('passes the id as the only parameter', function() {
-        var tracked = context.executedQueries['file:get'][0];
-        expect(tracked.parameters).to.exist;
-        expect(tracked.parameters).to.deep.equal({id:'1'});
+        it('passes the default view to the query', function() {
+          var tracked = context.executedQueries['file:get'][0];
+          expect(tracked.view).to.exist;
+          expect(tracked.view.name).to.equal('');
+        });
+
+        it('passes the id as the only parameter', function() {
+          var tracked = context.executedQueries['file:get'][0];
+          expect(tracked.parameters).to.exist;
+          expect(tracked.parameters).to.deep.equal({id:'1'});
+        });
+
       });
 
     });
