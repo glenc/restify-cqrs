@@ -6,7 +6,13 @@ function simpleQuery(model, name) {
     name: name,
     execute: function(view, parameters, callback) {
       context.trackExecutedQuery(model, name, view, parameters);
-      callback();
+      if (view.customResponse) {
+        callback(null, function(res) {
+          res.send(200, view.customResponse);
+        });
+      } else {
+        callback(null, {});
+      }
     }
   };
 };

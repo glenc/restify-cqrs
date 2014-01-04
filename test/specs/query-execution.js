@@ -168,7 +168,31 @@ describe('query execution', function() {
       });
     });
 
-  })
+  });
+
+  describe('response with custom sender', function() {
+    // the query app has been configured to do a custom
+    // res.send when the view has a customResponse property.
+    // in this case the 'export' view has a customResponse
+    // property so it should send the hard coded text in
+    // the response
+    var result = {};
+    before(function(done) {
+      context.reset();
+      client.get('/files/large-files?view=export', new helper.responseHandler(result, done));
+    });
+
+    it('passes the named view to the query', function() {
+      var tracked = context.executedQueries['file:large-files'][0];
+      expect(tracked.view).to.exist;
+      expect(tracked.view.name).to.equal('export');
+    });
+
+    it('sets the content type in the response', function() {
+      var tracked = context.executedQueries['file:large-files'][0];
+      expect(result.obj).to.equal(tracked.view.customResponse);
+    });
+  });
 
   describe('getter', function() {
 
